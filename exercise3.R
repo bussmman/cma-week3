@@ -100,4 +100,43 @@ caro %>%
   theme(legend.position = "right")
 
 ## Task 4
+## Function for the assignment of a unique Identifier
+rle_id = function(vec){
+  x = rle(vec)$lengths
+  as.factor(rep(seq_along(x), times=x))
+}
+
+## Assign unique identifier to all segments
+caro = caro %>%
+  mutate(segment_id = rle_id(static))
+
+## Filter the static points out
+caro = caro %>%
+  filter(!static)
+
+## Plot the uncleaned trajectories
+caro %>%
+  ggplot(aes(E, N, colour = segment_id))  +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  theme(legend.position = "right")
+
+## Clean out trajectories of length <5 minutes
+table(caro$segment_id) < 5
+names(which(table(caro$segment_id) < 5))
+caro_cleaned=caro[!caro$segment_id %in% names(which(table(caro$segment_id) < 5)), ]
+# Is there an easier way of doing this? If yes, I would be
+# happy for Feedback
+
+## Plot the cleaned trajectories
+caro_cleaned %>%
+  ggplot(aes(E, N, colour = segment_id))  +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  theme(legend.position = "right")
+
+## Task 5
 ## 
+
