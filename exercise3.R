@@ -81,4 +81,14 @@ caro = caro %>%
   ungroup()
 
 ## Task 2
+## Select a reasonable distance threshold
+boxplot(caro$stepMean)
+hist(caro$stepMean)
+
+# Threshold = mean distance
+caro = caro %>% 
+  ungroup() %>%
+  mutate(static = stepMean < mean(stepMean, na.rm = TRUE))
+
+## Task 3
 ## 
