@@ -138,5 +138,18 @@ caro_cleaned %>%
   theme(legend.position = "right")
 
 ## Task 5
-## 
+## Import the pedestrian data
+ped = read_delim("pedestrian.csv",",")
+ped$TrajID_char = as.character(ped$TrajID)
 
+## Plot the different trajectories
+ped %>%
+  ggplot(aes(E, N,colour=TrajID_char)) +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  facet_wrap("TrajID") +
+  theme(legend.position = "right")
+
+## Task 6
+## 
