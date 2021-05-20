@@ -91,4 +91,13 @@ caro = caro %>%
   mutate(static = stepMean < mean(stepMean, na.rm = TRUE))
 
 ## Task 3
+## plot the segmented "stop" and "move" trajectories
+caro %>%
+  ggplot(aes(E, N, colour = static))  +
+  geom_path() +
+  geom_point() +
+  coord_fixed() +
+  theme(legend.position = "right")
+
+## Task 4
 ## 
