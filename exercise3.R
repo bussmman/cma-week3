@@ -11,6 +11,7 @@ library(sf)           # to handle spatial vector data
 library(terra)        # To handle raster data
 library(lubridate)    # To handle dates and times
 library(zoo)          # To smoothen using moving window functions
+library(SimilarityMeasures)   # Similarity measures
 
 ## Import the Wildschwein Data
 wildschwein_BE = read_delim("wildschwein_BE_2056.csv",",")
@@ -126,8 +127,8 @@ caro %>%
 table(caro$segment_id) < 5
 names(which(table(caro$segment_id) < 5))
 caro_cleaned=caro[!caro$segment_id %in% names(which(table(caro$segment_id) < 5)), ]
-# Is there an easier way of doing this? If yes, I would be
-# happy for Feedback
+# There is probably an easier way of doing this? If yes, I
+# would be happy for Feedback
 
 ## Plot the cleaned trajectories
 caro_cleaned %>%
@@ -152,4 +153,48 @@ ped %>%
   theme(legend.position = "right")
 
 ## Task 6
-## 
+## Define the matrices with the different trajectories
+traj1 = as.matrix(ped[ped$TrajID==1,c(2,3)])
+traj2 = as.matrix(ped[ped$TrajID==2,c(2,3)])
+traj3 = as.matrix(ped[ped$TrajID==3,c(2,3)])
+traj4 = as.matrix(ped[ped$TrajID==4,c(2,3)])
+traj5 = as.matrix(ped[ped$TrajID==5,c(2,3)])
+traj6 = as.matrix(ped[ped$TrajID==6,c(2,3)])
+
+## DTW
+dtw = rep(0,5)
+dtw[1] = DTW(traj1,traj2)
+dtw[2] = DTW(traj1,traj3)
+dtw[3] = DTW(traj1,traj4)
+dtw[4] = DTW(traj1,traj5)
+dtw[5] = DTW(traj1,traj6)
+
+## Frechet
+frechet = rep(0,5)
+frechet[1] = Frechet(traj1,traj2)
+frechet[2] = Frechet(traj1,traj3)
+frechet[3] = Frechet(traj1,traj4)
+frechet[4] = Frechet(traj1,traj5)
+frechet[5] = Frechet(traj1,traj6)
+
+## EditDist
+editdist = rep(0,5)
+editdist[1] = EditDist(traj1,traj2)
+editdist[2] = EditDist(traj1,traj3)
+editdist[3] = EditDist(traj1,traj4)
+editdist[4] = EditDist(traj1,traj5)
+editdist[5] = EditDist(traj1,traj6)
+
+## LCSS (Do not run, if you have little time!)
+lcss = rep(0,5)
+lcss[1] = LCSS(traj1,traj2)
+lcss[2] = LCSS(traj1,traj3)
+lcss[3] = LCSS(traj1,traj4)
+lcss[4] = LCSS(traj1,traj5)
+lcss[5] = LCSS(traj1,traj6)
+
+## Plot and compare the similarity measures
+barplot(dtw, ylab="DTW")
+barplot(frechet, ylab="Frechet")
+barplot(editdist, ylab="EditDist")
+#barplot(lcss, ylab="LCSS")
